@@ -1,6 +1,7 @@
 ASCII Art - Seraaa 🌷
 
 A single-file love letter for Hannelore. Five pink ASCII tulips slowly open and close beside a bow-sealed envelope. Tap the envelope and a sheet of paper slides out, unfolding into a handwritten-style note with pink rules and kitten illustrations.
+
 ![Photo](./photo.png)
 
 
@@ -23,5 +24,6 @@ Dedication — Search for For my baby, hannelore to change the name above the bo
 Bloom timing — Each tulip takes seven seconds to open and seven seconds to close. Change BLOOM_DURATION_MS to adjust the duration of each phase.
 
 Writing lines — The --row CSS property controls both the spacing of the pink rules and the line height of the letter.
+
 
 
