@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASCII Tulips Art - Seraaa</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --ink: #563447;
+      --rose: #af4569;
+      --line: #e8c6cd;
+      --paper: #fffaf5;
+      --handwriting: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 68% 27%, #fff3ec, transparent 53%),
+        #fae6e8;
+      font: 16px/1.55 "Trebuchet MS", Arial, sans-serif;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #94315a;
+      outline-offset: 5px;
+    }
+
+    [hidden] { display: none !important; }
+
+    .top, main, footer {
+      position: relative;
+      max-width: 1160px;
+      margin: auto;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 27px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font: bold 27px Georgia, serif;
+      letter-spacing: -1.4px;
+    }
+
+    .brand i {
+      color: var(--rose);
+      font: normal 29px Georgia, serif;
+    }
+
+    .postmark {
+      color: #895968;
+      font: 12px "Courier New", monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1.08fr 1fr;
+      align-items: center;
+      gap: clamp(40px, 7vw, 108px);
+      padding: 54px 20px 58px;
+    }
+
+    /* Bouquet postcard */
+
+    .card {
+      position: relative;
+      isolation: isolate;
+      padding: 16px;
+      background: var(--paper);
+      border: 1px solid #e5cbd0;
+      border-radius: 4px;
+      transform: rotate(-1.5deg);
+      box-shadow: 0 12px 32px #79405418, 0 2px 5px #79405412;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      z-index: -2;
+      inset: 16px -7px -6px 8px;
+      border: 1px solid #d9afb9;
+      background: repeating-linear-gradient(
+        45deg, #edbfc8 0 6px, #fff2eb 6px 12px
+      );
+      transform: rotate(2.8deg);
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: var(--paper);
+    }
+
+    .tape {
+      position: absolute;
+      z-index: 1;
+      top: -13px;
+      left: calc(50% - 48px);
+      width: 96px;
+      height: 29px;
+      background: repeating-linear-gradient(
+        90deg, #efd0bb88 0 2px, #f5d9c788 2px 4px
+      );
+      transform: rotate(4deg);
+      clip-path: polygon(
+        2% 0, 100% 0, 98% 28%, 100% 55%, 98% 78%,
+        100% 100%, 0 100%, 2% 64%, 0 35%
+      );
+    }
+
+    .frame {
+      position: relative;
+      border: 1px solid #e7c8c8;
+      background:
+        radial-gradient(#d7bac44f .7px, transparent .9px) 0 0 / 9px 9px,
+        #fff7f0;
+    }
+
+    .frame::before, .frame::after {
+      content: "✧";
+      position: absolute;
+      top: 7px;
+      left: 12px;
+      color: #cd8b9c;
+      font: 20px Georgia, serif;
+    }
+
+    .frame::after { inset: auto 12px 7px auto; }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .caption {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0 1px;
+      font: italic 20px Georgia, serif;
+    }
+
+    .caption span {
+      color: #bd6682;
+      font: 14px Georgia, serif;
+    }
+
+    h1 {
+      margin: 15px 0 16px;
+      font: normal clamp(54px, 5.9vw, 89px)/.98 Georgia, serif;
+      letter-spacing: -.06em;
+    }
+
+    h1 em { color: var(--rose); font-weight: 400; }
+    .intro { max-width: 32ch; margin: 0; color: #785865; }
+    .mini { color: var(--rose); font: 14px "Courier New", monospace; }
+
+    /* Envelope, flap, and paper */
+
+    .mail {
+      display: block;
+      position: relative;
+      width: 222px;
+      height: 129px;
+      margin: 31px 0 18px;
+      background: #f6bfc9;
+      border: 1px solid #cf95a4;
+      border-radius: 6px;
+      box-shadow: 2px 6px 0 #dcadb63d;
+      perspective: 600px;
+      transform: rotate(-5deg);
+      transition: transform .3s;
+    }
+
+    .mail:enabled:hover { transform: rotate(-2deg) translateY(-3px); }
+    .mail:disabled { cursor: default; opacity: 1; }
+
+    .mail::before, .mail::after, .flap {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 5px;
+    }
+
+    .mail::before {
+      z-index: 2;
+      background: #f9ccd5;
+      clip-path: polygon(0 0, 60% 66%, 0 100%);
+    }
+
+    .mail::after {
+      z-index: 2;
+      background: linear-gradient(159deg, #f5c0cb, #ffe0e4);
+      clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .flap {
+      z-index: 3;
+      background: linear-gradient(#ffdde4, #f5b6c7);
+      clip-path: polygon(0 0, 100% 0, 53% 65%, 50% 67%, 47% 65%);
+      transform-origin: top;
+      transition: transform .45s;
+    }
+
+    .mail.open .flap {
+      z-index: 0;
+      transform: rotateX(120deg);
+    }
+
+    /* Visible only while the sheet is emerging from the envelope. */
+    .opening-paper {
+      position: absolute;
+      z-index: 1;
+      inset: 10px 12px 5px;
+      visibility: hidden;
+      pointer-events: none;
+      border: 1px solid #dca9b8;
+      border-radius: 4px;
+      background:
+        repeating-linear-gradient(
+          to bottom, transparent 0 11px, #e9bcc980 11px 12px
+        ),
+        #fff8f1;
+    }
+
+    .opening-paper::after {
+      content: "♡";
+      position: absolute;
+      top: 2px;
+      right: 9px;
+      color: #cb7993;
+    }
+
+    .mail.extracting .opening-paper {
+      visibility: visible;
+      animation: extract .46s .19s ease-in-out both;
+    }
+
+    @keyframes extract {
+      from { opacity: 0; transform: translateY(14px); }
+      15%  { opacity: 1; }
+      to   { opacity: 1; transform: translateY(-55px); }
+    }
+
+    .seal {
+      position: absolute;
+      z-index: 4;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity .2s;
+    }
+
+    .mail.open .seal { opacity: 0; }
+
+    .bow {
+      display: inline-block;
+      position: relative;
+      width: 49px;
+      height: 29px;
+      filter: drop-shadow(0 2px 0 #ae557750);
+    }
+
+    .bow::before, .bow::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 1px;
+      width: 23px;
+      height: 24px;
+      background: linear-gradient(145deg, #ffabc3, #e77898);
+      border: 1.5px solid #aa4c6d;
+      border-radius: 44% 65% 60% 36%;
+      transform: rotate(-12deg);
+    }
+
+    .bow::after {
+      right: 1px;
+      left: auto;
+      transform: scaleX(-1) rotate(-12deg);
+    }
+
+    .bow i {
+      position: absolute;
+      z-index: 1;
+      inset: 8px 18px 6px;
+      background: #ed88a5;
+      border: 1.5px solid #ad4e70;
+      border-radius: 50%;
+    }
+
+    .cat {
+      position: absolute;
+      z-index: 3;
+      right: 12px;
+      bottom: 8px;
+      white-space: pre;
+      text-align: center;
+      color: #985c70;
+      font: bold 10px/1 "Courier New", monospace;
+    }
+
+    /* Buttons */
+
+    .actions { display: flex; align-items: center; }
+
+    .reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 9px 18px;
+      color: #893655;
+      background: #ffedf2;
+      border: 1.5px solid #cc8aa1;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 3px #fff9fb, 0 3px 0 #e6b5c6;
+      transition: background .2s, transform .2s;
+    }
+
+    .reset span { color: #af4c73; font-size: 20px; line-height: 1; }
+    .reset:enabled:hover { background: #ffdae6; transform: translateY(-1px); }
+    .reset:enabled:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 0 0 3px #fff9fb;
+    }
+
+    .close {
+      flex: none;
+      padding: 9px 17px;
+      color: white;
+      background: #ac4267;
+      border: 0;
+      border-radius: 99px;
+      font: bold 15px "Trebuchet MS", sans-serif;
+    }
+
+    .close:hover { background: #8f3155; }
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+      color: #875f70;
+      font: 13px "Courier New", monospace;
+    }
+
+    .status::before { content: "●"; margin-right: 8px; color: #a98188; }
+    .bloom .status::before { color: #67875d; }
+
+    /* Floating hearts */
+
+    .sky {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .sky i {
+      position: absolute;
+      bottom: -40px;
+      color: #d885a2;
+      font-style: normal;
+      animation: rise var(--t) linear infinite;
+    }
+
+    .sky i:nth-child(3n) { color: white; }
+
+    @keyframes rise {
+      0% { transform: translate(0, 0); opacity: 0; }
+      15%, 80% { opacity: .55; }
+      50% { transform: translate(23px, -53vh); }
+      100% { transform: translate(-10px, -110vh); opacity: 0; }
+    }
+
+    /* Pop-up stationery */
+
+    dialog {
+      position: fixed;
+      inset: 0;
+      width: min(52rem, calc(100vw - 1.5rem));
+      height: min(56rem, 91vh);
+      height: min(56rem, 91dvh);
+      max-width: none;
+      max-height: 94dvh;
+      margin: auto;
+      padding: 0;
+      overflow: auto;
+      overscroll-behavior: contain;
+      border: 1px solid #e6c5ce;
+      border-radius: 8px;
+      background: #fff6f2;
+      box-shadow: 0 24px 80px #230c2259, 0 4px 14px #230c2229;
+      transform-origin: center;
+    }
+
+    dialog::backdrop {
+      background: rgba(43, 21, 36, .66);
+      animation: dim-in .24s ease-out;
+    }
+
+    @keyframes dim-in { from { opacity: 0; } to { opacity: 1; } }
+    body:has(dialog[open]) { overflow: hidden; }
+
+    /*
+      The rules and text share --row.
+      Each wrapped line uses one row. Section gaps use whole rows.
+    */
+    .letter {
+      --row: clamp(32px, 4.7vw, 44px);
+      position: relative;
+      isolation: isolate;
+      min-height: 100%;
+      padding: var(--row) clamp(4.2rem, 13%, 7rem) calc(2 * var(--row));
+      color: #563d42;
+      font-family: var(--handwriting);
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0 calc(var(--row) - 3px),
+          #e6abbc70 calc(var(--row) - 3px) calc(var(--row) - 2px),
+          transparent calc(var(--row) - 2px) var(--row)
+        ),
+        linear-gradient(120deg, #fff4f3, #fffaf3 54%, #fff0f1);
+    }
+
+    .letter header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      height: calc(2 * var(--row));
+      margin: 0;
+      padding: 0;
+    }
+
+    .letter header .brand {
+      color: #a55772;
+      font: 15px var(--handwriting);
+      letter-spacing: 0;
+    }
+
+    .letter h2 {
+      margin: var(--row) 0;
+      padding: 0;
+      color: #b44970;
+      font: bold calc(var(--row) * .76)/var(--row) var(--handwriting);
+      overflow-wrap: anywhere;
+    }
+
+    .letter .prose {
+      font: calc(var(--row) * .54)/var(--row) var(--handwriting);
+      overflow-wrap: anywhere;
+    }
+
+    .letter .prose p { margin: 0 0 var(--row); }
+
+    .letter .signature {
+      margin: 0;
+      color: #ad496b;
+      font: bold calc(var(--row) * .62)/var(--row) var(--handwriting);
+    }
+
+    .note-border, .stickers {
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .note-border {
+      inset: 12px;
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
+    }
+
+    .stickers { inset: 0; overflow: hidden; }
+
+    .sticker {
+      position: absolute;
+      width: 12%;
+      max-width: 94px;
+      filter: drop-shadow(0 2px 0 #ca8c9f55);
+    }
+
+    .kitty-one { top: 13%; left: 2%; transform: rotate(-8deg); }
+    .kitty-two { bottom: 16%; right: 2%; transform: rotate(8deg); }
+    .bear { bottom: 5%; left: 3%; width: 9%; transform: rotate(-9deg); }
+
+    .heart, .tiny-mail {
+      position: absolute;
+      color: #d35b82;
+      font: bold 24px Georgia, serif;
+    }
+
+    .h-one { left: 6%; top: 53%; transform: rotate(-16deg); }
+    .h-two { left: 49%; top: 5px; background: #fff6f2; font-size: 18px; }
+    .h-three { right: 5%; top: 44%; }
+    .tiny-mail { right: 4%; top: 21%; transform: rotate(9deg); }
+
+    @media (max-width: 1220px) {
+      .top, footer { margin-inline: 5%; }
+      main { padding-inline: 6%; }
+    }
+
+    @media (max-width: 720px) {
+      .top { padding-block: 15px; }
+      .postmark { letter-spacing: 1px; }
+      main { grid-template-columns: 1fr; gap: 33px; padding: 39px 7% 32px; }
+      .card { width: min(100%, 425px); margin: auto; }
+      .copy { text-align: center; }
+      .intro, .mail { margin-inline: auto; }
+      .actions { justify-content: center; }
+      h1 { font-size: 56px; }
+      h1 br { display: none; }
+      h1 em { white-space: nowrap; }
+      .mail { margin-top: 24px; }
+      .caption { font-size: 18px; }
+      .brand { font-size: 24px; }
+    }
+
+    @media (max-width: 560px) {
+      .letter { padding-inline: 13%; }
+      .letter header .brand { font-size: 12px; gap: 5px; }
+      .note-border {
+        inset: 6px;
+        width: calc(100% - 12px);
+        height: calc(100% - 12px);
+      }
+      .sticker { width: 11%; }
+      .tiny-mail, .heart { font-size: 17px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sky" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand"><i aria-hidden="true">✿</i> For my baby, hannelore</div>
+    <span class="postmark">♡ &nbsp;Tulips Bouquet</span>
+  </header>
+
+  <main>
+    <section class="card" aria-label="Bouquet postcard">
+      <div class="tape"></div>
+      <div class="frame">
+        <canvas id="art" width="520" height="410" role="img"
+          aria-label="Five seven-petal pink tulips, white snapdragons and baby's breath tied with a rose ribbon.">
+        </canvas>
+      </div>
+      <div class="caption"><span>✧</span> Five tulips for you <span>✧</span></div>
+    </section>
+
+    <section class="copy">
+      <span class="mini" aria-hidden="true">✧ ── ♡ ── ✧</span>
+      <h1>A little love,<br> <em>in bloom.</em></h1>
+      <p class="intro">A bouquet and a little note, just for you. Tap the envelope to read your letter.</p>
+
+      <button class="mail" type="button" aria-label="Open the pink envelope"
+              aria-haspopup="dialog" aria-controls="letter-dialog">
+        <span class="opening-paper" aria-hidden="true"></span>
+        <span class="flap"></span>
+        <span class="seal"><span class="bow"><i></i></span></span>
+        <span class="cat" aria-hidden="true">/\_/\
+=• •=</span>
+      </button>
+
+      <div class="actions">
+        <button class="reset" type="button" hidden>
+          <span aria-hidden="true">✿</span> Reset bouquet
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span class="status" role="status">Tulips in bud</span>
+    <span aria-hidden="true">✿ &nbsp; ♡ &nbsp; ✿</span>
+  </footer>
+
+  <dialog id="letter-dialog" aria-labelledby="greeting">
+    <article class="letter">
+
+      <!-- Self-contained stationery illustrations. -->
+      <svg aria-hidden="true" width="0" height="0" style="position:absolute"
+           xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <g id="kitty" stroke="#513b42" stroke-width="2.5"
+             stroke-linejoin="round" stroke-linecap="round">
+            <ellipse cx="43" cy="103" rx="10" ry="6" fill="#fff8ee"/>
+            <ellipse cx="66" cy="103" rx="10" ry="6" fill="#fff8ee"/>
+            <path d="M38 75 Q53 64 69 76 L77 98 Q52 110 30 97Z" fill="#f698b4"/>
+            <path d="M23 34 Q18 15 23 10 Q29 9 41 21 Q53 17 64 20
+                     Q78 8 85 13 L85 35 Q94 50 85 65 Q75 79 51 79
+                     Q25 79 18 63 Q12 47 23 34Z" fill="#fffaf0"/>
+            <g fill="#45333b" stroke="none">
+              <ellipse cx="37" cy="51" rx="2.8" ry="4"/>
+              <ellipse cx="69" cy="51" rx="2.8" ry="4"/>
+            </g>
+            <ellipse cx="53" cy="57" rx="4" ry="2.6" fill="#f6ce6c" stroke-width="1.3"/>
+            <path d="M23 48l-12 -3m12 10H9m16 6l-12 4m68 -18l12 -4m-12 12l13 1m-15 6l12 5"
+                  fill="none"/>
+            <path d="M64 23 Q51 8 57 5 Q65 0 73 13 Q86 7 89 14
+                     Q93 25 85 28 Q79 29 73 22Z" fill="#ed668e"/>
+            <circle cx="72" cy="17" r="5" fill="#f595b1"/>
+            <path d="M53 98 Q27 83 38 74 Q45 67 53 78 Q61 66 69 74
+                     Q80 84 53 98Z" fill="#ed7299"/>
+            <ellipse cx="34" cy="82" rx="6" ry="7" fill="#fff8ef"/>
+            <ellipse cx="72" cy="82" rx="6" ry="7" fill="#fff8ef"/>
+          </g>
+
+          <g id="bear" stroke="#66443e" stroke-width="2.8">
+            <circle cx="29" cy="24" r="10" fill="#c78c6b"/>
+            <circle cx="71" cy="24" r="10" fill="#c78c6b"/>
+            <ellipse cx="50" cy="75" rx="21" ry="23" fill="#dbab86"/>
+            <ellipse cx="50" cy="43" rx="30" ry="26" fill="#e3af85"/>
+            <g fill="#513838" stroke="none">
+              <circle cx="39" cy="42" r="3"/>
+              <circle cx="60" cy="42" r="3"/>
+              <ellipse cx="50" cy="50" rx="4" ry="3"/>
+            </g>
+            <path d="M42 70l8 4 9-4v12l-9-5-8 5Z" fill="#ed829f"/>
+            <ellipse cx="34" cy="92" rx="9" ry="7" fill="#d89a77"/>
+            <ellipse cx="66" cy="92" rx="9" ry="7" fill="#d89a77"/>
+          </g>
+        </defs>
+      </svg>
+
+      <svg class="note-border" viewBox="0 0 500 620" preserveAspectRatio="none"
+           aria-hidden="true">
+        <path id="border-path" fill="none" stroke="#e59aaf"
+              stroke-width="2" vector-effect="non-scaling-stroke"/>
+      </svg>
+
+      <div class="stickers" aria-hidden="true">
+        <svg class="sticker kitty-one" viewBox="0 0 104 114"><use href="#kitty"/></svg>
+        <svg class="sticker kitty-two" viewBox="0 0 104 114"><use href="#kitty"/></svg>
+        <svg class="sticker bear" viewBox="0 0 100 104"><use href="#bear"/></svg>
+        <span class="heart h-one">♡</span>
+        <span class="heart h-two">♥</span>
+        <span class="heart h-three">♡</span>
+        <span class="tiny-mail">💌</span>
+      </div>
+
+      <header>
+        <span class="brand"><i aria-hidden="true">✿</i> ASCII Art - Seraaa</span>
+        <button class="close" type="button" autofocus>Close ×</button>
+      </header>
+
+      <!-- EDIT YOUR LETTER HERE -->
+      <h2 id="greeting">legends lang nakakaalam</h2>
+      <div class="prose">
+        <p>chuchuchu wala pang laman</p>
+        <p>chuchuchu wala pang laman</p>
+        <p>saka na to</p>
+      </div>
+      <p class="signature">aba pwede to gago ♡</p>
+      <!-- END OF LETTER -->
+
+    </article>
+  </dialog>
+
+  <script>
+    "use strict";
+
+    const $ = selector => document.querySelector(selector);
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+
+    // Wavy pink border around all four edges of the letter.
+    function drawBorder() {
+      let path = "M 2 2";
+
+      for (const [dx, dy] of [[1, 0], [0, 1], [-1, 0], [0, -1]]) {
+        const count = dx ? 26 : 32;
+        const stepX = dx * 496 / count;
+        const stepY = dy * 616 / count;
+
+        for (let i = 0; i < count; i++) {
+          const bend = i % 2 ? 4 : -4;
+          path += ` q ${stepX / 2 + bend * dy} ${stepY / 2 + bend * dx}
+                      ${stepX} ${stepY}`;
+        }
+      }
+
+      $("#border-path").setAttribute("d", path + " Z");
+    }
+
+    drawBorder();
+
+    // Floating background.
+    const sky = $(".sky");
+
+    for (let i = 0; i < 32; i++) {
+      const heart = document.createElement("i");
+      heart.textContent = ["♡", "✧", "♥", "·"][i % 4];
+      heart.style.left = `${(i * 37) % 100}%`;
+      heart.style.fontSize = `${11 + (i % 5) * 3}px`;
+      heart.style.setProperty("--t", `${15 + i % 9}s`);
+      heart.style.animationDelay = `-${(i * 7) % 23}s`;
+      sky.append(heart);
+    }
+
+    // ASCII bouquet.
+    const canvas = $("#art");
+    const ctx = canvas.getContext("2d");
+    const BLOOM_DURATION_MS = 7000;
+
+    const flowers = [
+      [135, 156, -.42], [204, 102, -.21], [267, 76, .04],
+      [326, 140, .23], [390, 109, .42]
+    ];
+
+    const petals = [
+      [-18, -.64], [-12, -.42], [-6, -.22], [0, 0],
+      [6, .22], [12, .42], [18, .64]
+    ];
+
+    const colors = [
+      "#b65378", "#da7297", "#c95783", "#e285a0",
+      "#b94c75", "#e391a9", "#ce6289"
+    ];
+
+    const petalRows = ["/\\", "/::\\", "|::|", "|::|", "\\::/", "\\/"];
+
+    const fillers = [
+      [102, 213, -1, true], [164, 175, -1, false], [225, 147, -1, true],
+      [306, 143, 1, false], [362, 209, 1, true], [405, 234, 1, false],
+      [123, 253, -1, false]
+    ];
+
+    const leaves = [
+      [196, 256, -.83, 84], [296, 252, .76, 82], [241, 231, -.25, 72],
+      [319, 223, .95, 57], [172, 217, -.76, 52], [281, 230, .28, 57]
+    ];
+
+    const folds = [
+      [145, 215, 248, 375], [145, 215, 272, 249], [272, 249, 370, 215],
+      [370, 215, 278, 375], [248, 375, 278, 375], [272, 249, 252, 337]
+    ];
+
+    let cycleStart = performance.now();
+    let bloomed = false;
+    let burst = -10000;
+    let frame = 0;
+
+    function glyph(text, x, y, color, size = 10) {
+      ctx.fillStyle = color;
+      ctx.font = `bold ${size}px "Courier New", monospace`;
+      ctx.textAlign = "center";
+      ctx.fillText(text, x, y);
+    }
+
+    function line(x, y, endX, endY, color, mark, spacing = 6, size = 10) {
+      const count = Math.max(1, Math.ceil(Math.hypot(endX - x, endY - y) / spacing));
+
+      for (let i = 0; i <= count; i++) {
+        const t = i / count;
+        glyph(mark, x + (endX - x) * t, y + (endY - y) * t, color, size);
+      }
+    }
+
+    function leaf(x, y, angle, length) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+
+      for (let j = 0; j < length; j += 5) {
+        const width = Math.round(1.6 * Math.sin(Math.PI * j / length));
+        glyph("/" + "|".repeat(width) + "\\", 0, -j, "#729171", 8);
+      }
+
+      ctx.restore();
+    }
+
+    function sprig(x, y, side, dragon) {
+      line(x, y, x + side * 21, y - 82, "#849878", ":");
+
+      for (let j = 1; j <= 8; j++) {
+        const t = j / 8;
+        const direction = j % 2 ? 1 : -1;
+        const branchX = x + side * 21 * t;
+        const branchY = y - 82 * t;
+        const tip = branchX + direction * (dragon ? 8 : 19) * (1.18 - t * .56);
+
+        line(branchX, branchY, tip, branchY - 8, "#93a080", ".", 4);
+
+        if (dragon) {
+          glyph("(_) ", tip, branchY - 9, "#a59799", 11);
+          glyph("( )", tip, branchY - 12, "#b6a6a4", 10);
+          glyph("*", tip, branchY - 11, "white", 10);
+        } else {
+          glyph(".*.", tip, branchY - 9, "#b5a4a5", 10);
+          glyph("*", tip - 4, branchY - 14, "#958399", 8);
+        }
+      }
+    }
+
+    function drawFlower(x, y, tilt, progress) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(tilt);
+
+      petals.forEach(([offset, angle], i) => {
+        ctx.save();
+        ctx.translate(
+          offset * (.53 + .53 * progress),
+          -Math.sin(i * Math.PI / 6) * 6
+        );
+        ctx.rotate(angle * (.59 + 1.02 * progress));
+
+        petalRows.forEach((row, j) => {
+          glyph(row, 0, -35 + j * 6.6, colors[i], 8.4);
+        });
+
+        ctx.restore();
+      });
+
+      glyph("\\|/", 0, 5, "#73916c", 13);
+      ctx.restore();
+    }
+
+    function drawWrapping() {
+      for (let y = 215; y < 376; y += 6) {
+        const t = (y - 215) / 161;
+        const left = 145 + 103 * t;
+        const right = 370 - 92 * t;
+
+        for (let x = left; x < right; x += 7) {
+          if (y < 244 - Math.abs(x - 245) * .24) continue;
+          const mark = Math.round(x / 7 + y / 6) % 4 === 0 ? "+" : ".";
+          glyph(mark, x, y, x < 207 + t * 55 ? "#c19c94" : "#d1aea2", 9);
+        }
+      }
+
+      for (const [a, b, c, d] of folds) {
+        const mark = Math.abs(d - b) < 12 ? "-" : c > a ? "\\" : "/";
+        line(a, b, c, d, "#bd978e", mark);
+      }
+
+      for (const side of [-1, 1]) {
+        for (let i = 0; i < 32; i++) {
+          const angle = i * 2 * Math.PI / 32;
+          glyph(
+            "o",
+            258 + side * (20 + 19 * Math.cos(angle)),
+            309 + 10 * Math.sin(angle) - 5 * Math.cos(angle),
+            "#b75878", 8
+          );
+        }
+
+        line(258, 311, 258 + side * 26, 348, "#c16988",
+             side < 0 ? "/" : "\\", 4, 12);
+      }
+
+      glyph("(@)", 258, 314, "#a74769", 12);
+    }
+
+    function render(now) {
+      // 0 → 1 over seven seconds, then 1 → 0 over seven seconds.
+      const bloom = motion.matches
+        ? Number(bloomed)
+        : (1 - Math.cos(Math.PI * (now - cycleStart) / BLOOM_DURATION_MS)) / 2;
+
+      const scale = Math.min(3, devicePixelRatio || 1) * canvas.clientWidth / 520;
+      const width = Math.round(520 * scale);
+      const height = Math.round(410 * scale);
+
+      if (width && canvas.width !== width) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      ctx.setTransform(canvas.width / 520, 0, 0, canvas.height / 410, 0, 0);
+      ctx.clearRect(0, 0, 520, 410);
+
+      ctx.save();
+      ctx.translate(260, 316);
+      ctx.rotate(motion.matches ? 0 : .014 * Math.sin(now / 1700));
+      ctx.translate(-260, -316);
+
+      for (const [x, y] of flowers) {
+        line(x, y, 257, 314, "#6e8c67", x < 245 ? "\\" : "/", 5.5, 11);
+      }
+
+      for (const [x, y, side, dragon] of fillers) {
+        line(x, y, 257, 314, "#91a184", ".", 5);
+        sprig(x, y, side, dragon);
+      }
+
+      leaves.forEach(args => leaf(...args));
+      drawWrapping();
+      flowers.forEach(([x, y, tilt]) => drawFlower(x, y, tilt, bloom));
+      ctx.restore();
+
+      const t = (now - burst) / 1750;
+      if (t >= 0 && t < 1 && !motion.matches) {
+        ctx.globalAlpha = Math.sin(t * Math.PI);
+
+        for (let i = 0; i < 25; i++) {
+          glyph(
+            i % 2 ? "+" : "*",
+            110 + (i * 71) % 300 + Math.sin(i + t * 4) * 12,
+            50 + (i * 53) % 150 - t * 33,
+            "#d97496", 11
+          );
+        }
+
+        ctx.globalAlpha = 1;
+      }
+
+      frame = 0;
+      if (!motion.matches && !document.hidden) schedule();
+    }
+
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(render);
+    }
+
+    function updateStatus() {
+      $(".status").textContent = motion.matches
+        ? (bloomed ? "Tulips in bloom" : "Tulips in bud")
+        : "Tulips slowly opening and closing";
+    }
+
+    function setBloom(value) {
+      bloomed = value;
+      if (!value) cycleStart = performance.now();
+
+      document.body.classList.toggle("bloom", value);
+      burst = value ? performance.now() : -10000;
+
+      updateStatus();
+      schedule();
+    }
+
+    new ResizeObserver(schedule).observe(canvas);
+    document.addEventListener("visibilitychange", schedule);
+    motion.addEventListener("change", () => {
+      updateStatus();
+      schedule();
+    });
+
+    updateStatus();
+    schedule();
+
+    // Envelope and pop-up interaction.
+    const dialog = $("#letter-dialog");
+    const envelope = $(".mail");
+    const paper = $(".opening-paper");
+    const reset = $(".reset");
+    const intro = $(".intro");
+    const initialIntro = intro.textContent;
+
+    let phase = "sealed";
+    let expansion;
+
+    function pause(ms) {
+      return new Promise(resolve => setTimeout(resolve, motion.matches ? 0 : ms));
+    }
+
+    async function openLetter() {
+      if (phase !== "sealed") return;
+      phase = "opening";
+
+      envelope.disabled = true;
+      envelope.classList.add("open", "extracting");
+      reset.hidden = false;
+      reset.disabled = true;
+
+      // Let the flap lift and the lined sheet slide out.
+      await pause(650);
+
+      // Capture the paper position before hiding it.
+      const paperBox = paper.getBoundingClientRect();
+      envelope.classList.remove("extracting");
+
+      dialog.showModal();
+      dialog.scrollTop = 0;
+
+      const cardBox = dialog.getBoundingClientRect();
+      const dx = paperBox.left + paperBox.width / 2
+               - cardBox.left - cardBox.width / 2;
+      const dy = paperBox.top + paperBox.height / 2
+               - cardBox.top - cardBox.height / 2;
+
+      const startPose =
+        `translate(${dx}px, ${dy}px) ` +
+        `scale(${paperBox.width / cardBox.width}, ${paperBox.height / cardBox.height})`;
+
+      // The large letter grows from the extracted sheet's position.
+      expansion = dialog.animate(
+        [
+          { transform: startPose, opacity: 1 },
+          { transform: "none", opacity: 1 }
+        ],
+        {
+          duration: motion.matches ? 0 : 340,
+          easing: "cubic-bezier(.2,.75,.2,1)"
+        }
+      );
+
+      try {
+        await expansion.finished;
+      } catch (error) {
+        // Escape can interrupt the opening animation.
+        if (error.name !== "AbortError") throw error;
+      }
+
+      if (phase === "opening") phase = "reading";
+    }
+
+    async function closeLetter() {
+      if (!dialog.open || phase === "closing") return;
+      phase = "closing";
+
+      const style = getComputedStyle(dialog);
+      const start = { transform: style.transform, opacity: style.opacity };
+      expansion?.cancel();
+
+      setBloom(true);
+      intro.textContent =
+        "Reset the bouquet to seal the envelope and read your letter again.";
+
+      await dialog.animate(
+        [start, { transform: "translateY(10px) scale(.97)", opacity: 0 }],
+        { duration: motion.matches ? 0 : 190, easing: "ease-in" }
+      ).finished;
+
+      dialog.close();
+
+      // Keep the envelope open and empty until Reset is pressed.
+      phase = "read";
+      reset.disabled = false;
+      reset.focus({ preventScroll: true });
+    }
+
+    async function resetBouquet() {
+      if (phase !== "read") return;
+      phase = "resetting";
+
+      reset.hidden = true;
+      envelope.classList.remove("open");
+      intro.textContent = initialIntro;
+      setBloom(false);
+
+      await pause(600);
+
+      phase = "sealed";
+      envelope.disabled = false;
+      envelope.focus({ preventScroll: true });
+    }
+
+    envelope.addEventListener("click", openLetter);
+    reset.addEventListener("click", resetBouquet);
+    $(".close").addEventListener("click", closeLetter);
+
+    dialog.addEventListener("cancel", event => {
+      event.preventDefault();
+      closeLetter();
+    });
+  </script>
+</body>
+</html>
